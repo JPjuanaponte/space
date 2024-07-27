@@ -54,7 +54,7 @@ def cantidad_filmaciones_mes(mes: str):
     cantidad_peliculas = movies[movies['release_date'].dt.month == mes_numero].shape[0]
     
     return f"{cantidad_peliculas} películas fueron estrenadas en el mes de {mes}"
-
+"""
 # FUNCION PARA CONTAR PELICULAS ESTRENADAS EN UN DIA ESPECIFICO
 
 @app.get("/cantidad_filmaciones_dia/")
@@ -289,3 +289,4 @@ def recomendacion(titulo: str):
     
     # Devolver los títulos de las películas más similares
     return movies['title'].iloc[similar_movie_indices].tolist()
+    """
