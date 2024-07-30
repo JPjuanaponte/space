@@ -1,3 +1,4 @@
+#Importar librerias necesarias 
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -11,12 +12,12 @@ from sklearn.neighbors import NearestNeighbors
 from fastapi import FastAPI 
 from fastapi import HTTPException
 
-# Carga de datos
+# Carga de datos desde el archivo parquet
 movies = pd.read_parquet('Data_movies_.parquet')
-
+# Inicializar la aplcación FastApi con que luego se hará el despliegue
 app = FastAPI()
 
-# Función para normalizar texto eliminando acentos
+# Función para normalizar texto eliminando acentos en os ingresos del usuario
 def normalize_text(text):
     return unidecode.unidecode(text)
 
@@ -26,7 +27,7 @@ def normalize_text(text):
 def cantidad_filmaciones_mes(mes: str):
     # Verificar si se ha proporcionado un valor válido para el mes
     if not isinstance(mes, str) or not mes.strip():
-        return "Dia no valido. Por favor, proporciona un nombre de día en español."
+        return "Mes no valido. Por favor, proporciona un mes en español."
     # Mapa de meses en español a número de mes
     meses_dict = {
         "enero": 1,
@@ -42,7 +43,7 @@ def cantidad_filmaciones_mes(mes: str):
         "noviembre": 11,
         "diciembre": 12
     }
-    
+    #Se obtiene el número de mes que equivale al nombre de mes
     mes_numero = meses_dict.get(mes.lower())
     if mes_numero is None:
         return "Mes no válido. Usa uno de los meses en español."
@@ -72,10 +73,10 @@ def cantidad_filmaciones_dia(dia: str):
         "sábado": 6,
         "domingo": 7
     }
-    
+    # Se obtiene el número de día correspondiente al nombre del día
     dia_numero = dias_dict.get(dia.lower())
     if dia_numero is None:
-        return "Día no válido---> Usa uno de los días en español o verifica ortografía."
+        return "Día no válido, Usa uno de los días en español o verifica ortografía."
 
     # Convertir la columna 'release_date' a datetime
     movies['release_date'] = pd.to_datetime(movies['release_date'], format='%Y-%m-%d', errors='coerce')
@@ -85,15 +86,14 @@ def cantidad_filmaciones_dia(dia: str):
     
     return f"{cantidad_peliculas} películas fueron estrenadas en los días {dia}"
 
-# FUNCION PARA INFORMACION DE AÑO DE ESTRENO Y CRITICA PROMEDIO PELICULA
-
-# Función para obtener información de la película por título
+# FUNCION PARA INFORMACION DE AÑO DE ESTRENO Y CRITICA PROMEDIO PELICULA POR TITULO
 
 @app.get("/score_titulo/")
 def score_titulo(titulo_pelicula: str):
+    #verificar se si ha proporcionado un nombre valido. 
     try:
         if not isinstance(titulo_pelicula, str) or not titulo_pelicula.strip():
-            return {"error": "Nombre no valido. Por favor, proporciona un nombre valido para la película."}
+            return {"Nombre no valido. Por favor, proporciona un nombre valido para la película."}
         
         # Normalizar el título de entrada
         titulo_normalizado = normalize_text(titulo_pelicula.lower())
@@ -107,11 +107,17 @@ def score_titulo(titulo_pelicula: str):
         if pelicula.empty:
             return {"error": "Título de película no encontrado."}
         
-        # Extraer información
+        # Extraer información de la película
         titulo = pelicula.iloc[0]['title']
-        release_year = pelicula.iloc[0]['release_year']
+        release_year = pelicula.iloc[0]['release_year'] 
         vote_average = pelicula.iloc[0]['vote_average']
-        
+        """
+        # Convertir release_year a entero si es necesario
+        if pd.isna(release_year):
+            release_year = "Desconocido"
+        else:
+            release_year = int(release_year)
+        """  
         return {
             f"La película '{titulo}' fue estrenada en el año {release_year} con un puntaje de la critica promedio de {vote_average:.2f}"
         }
@@ -123,6 +129,7 @@ def score_titulo(titulo_pelicula: str):
 
 @app.get("/votos_titulo/")
 def votos_titulo(titulop: str):
+    #verificra se si ha proporcionado un nombre valido. 
     try:
         if not isinstance(titulop, str) or not titulop.strip():
             return {'error': "Nombre no válido. Por favor, proporciona un nombre válido para la película."}
@@ -142,18 +149,18 @@ def votos_titulo(titulop: str):
         # Extraer información
         pelicula_info = pelicula.iloc[0]
         titulo = pelicula_info['title']
-        anio_estreno = pelicula_info['release_year']
+        anio_estreno = int(pelicula_info['release_year']) 
         votos = pelicula_info['vote_count']
         promedio_voto = pelicula_info['vote_average']
     
-        # Verificar si la cantidad de votos es al menos 2000
+        # Verificar si la cantidad de votos es más de 2000
         if votos < 2000:
             return {
                 "La película no cumple con el mínimo de 2000 valoraciones, pendiente por ejecutar.",
             }
         
         return {
-                f"La película '{titulo}' fue estrenada en el año {anio_estreno} con un total de {votos} votos y un promedio de calificación de {promedio_voto:.2f}."
+                f"La película '{titulo}' fue estrenada en el año {anio_estreno} con un total de {votos} votos y un califación promedio por parte de la crítica de {promedio_voto:.2f}"
         }
         
     except Exception as e:
@@ -165,7 +172,7 @@ def votos_titulo(titulop: str):
 @app.get("/get_actor/")
 # Función para obtener información del actor
 def get_actor(nombre_actor: str):
-
+    # Verficiar si se ha proporcionado un nombre válido del actor
     if not isinstance(nombre_actor, str) or not nombre_actor.strip():
         return "Nombre no valido. Por favor, proporciona un nombre valido de actor."
     # Normalizar el nombre del actor
@@ -187,12 +194,13 @@ def get_actor(nombre_actor: str):
     promedio_retorno = peliculas_actor['return'].mean()
     
     return (f"El actor '{nombre_actor}' ha participado en {cantidad_peliculas} filmaciones, "
-            f"ha conseguido un retorno total de {retorno_total:.2f} con un promedio de retorno por filmación de {promedio_retorno:.2f}.")
+            f"ha conseguido un retorno total de {retorno_total:.2f} con un promedio de retorno por filmación de {promedio_retorno:.2f}")
 
 # FUNCION INFORMACION DIRECTOR Y PELICULAS PRODUCIDAS
 
 @app.get("/get_director/")
 def get_director(nombre_director: str):
+    # Vericicar si se ha proporcionado un nombre valido de director 
     if not isinstance(nombre_director, str) or not nombre_director.strip():
         raise HTTPException(status_code=400, detail="Nombre no válido. Por favor, proporciona un nombre válido de director.")
     
@@ -237,7 +245,7 @@ def get_director(nombre_director: str):
 
 # FUNCION DE RECOMENDACION DE PELICULAS 
 
-# Asegurarse de que no hay valores None en las columnas seleccionadas
+# Asegurar que no hay valores None en las columnas que se van a evaludr
 movies['overview'] = movies['overview'].fillna('')
 movies['genres_names'] = movies['genres_names'].fillna('')
 movies['cast_names'] = movies['cast_names'].fillna('')
@@ -266,6 +274,7 @@ nn_model.fit(tfidf_matrix)
 @app.get("/recomendacion/")
 # Crear la función de recomendación
 def recomendacion(titulo: str):
+    # # Vericicar si se ha proporcionado un nombre valido de pelicula 
     if not isinstance(titulo, str) or not titulo.strip():
         return "Nombre no válido. Por favor, proporciona un nombre de película válido."
 
