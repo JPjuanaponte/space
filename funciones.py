@@ -23,8 +23,12 @@ def normalize_text(text):
 
 # FUNCION PARA CONTAR PELICULAS ESTRENADAS EN UN MES ESPECIFICO
 
-@app.get("/cantidad_filmaciones_mes/") 
+@app.get("/cantidad_filmaciones_mes/")
 def cantidad_filmaciones_mes(mes: str):
+    """ 
+    ¿Te preguntas cuántas películas se estrenaron en tu mes favorito? 
+    ¡Esta función te lo dice! Solo ingresa el nombre del mes en español y descubre la cantidad de estrenos.
+    """
     # Verificar si se ha proporcionado un valor válido para el mes
     if not isinstance(mes, str) or not mes.strip():
         return "Mes no valido. Por favor, proporciona un mes en español."
@@ -60,6 +64,10 @@ def cantidad_filmaciones_mes(mes: str):
 
 @app.get("/cantidad_filmaciones_dia/")
 def cantidad_filmaciones_dia(dia: str):
+    """ 
+    ¿Quieres saber cuántas películas se estrenaron en un día específico de la semana?
+    Esta función te ayuda a descubrirlo. Ingresa el día en español y obtén el número de estrenos.
+    """    
     # Verificar si se ha proporcionado un valor válido para el día
     if not isinstance(dia, str) or not dia.strip():
         return "Dia no valido. Por favor, proporciona un nombre de día en español."
@@ -90,6 +98,10 @@ def cantidad_filmaciones_dia(dia: str):
 
 @app.get("/score_titulo/")
 def score_titulo(titulo_pelicula: str):
+    """
+    ¿Tienes una película favorita y quieres saber más sobre su año de estreno y su puntaje de popularidad?
+    Esta función te da todos esos detalles.
+    """
     #verificar se si ha proporcionado un nombre valido. 
     try:
         if not isinstance(titulo_pelicula, str) or not titulo_pelicula.strip():
@@ -110,16 +122,10 @@ def score_titulo(titulo_pelicula: str):
         # Extraer información de la película
         titulo = pelicula.iloc[0]['title']
         release_year = pelicula.iloc[0]['release_year'] 
-        vote_average = pelicula.iloc[0]['vote_average']
-        """
-        # Convertir release_year a entero si es necesario
-        if pd.isna(release_year):
-            release_year = "Desconocido"
-        else:
-            release_year = int(release_year)
-        """  
+        popularity = pelicula.iloc[0]['popularity']
+        
         return {
-            f"La película '{titulo}' fue estrenada en el año {release_year} con un puntaje de la critica promedio de {vote_average:.2f}"
+            f"La película '{titulo}' fue estrenada en el año {release_year} con un puntaje de popularidad de {popularity:.2f}"
         }
     except Exception as e:
         return {"error": str(e)}
@@ -129,6 +135,10 @@ def score_titulo(titulo_pelicula: str):
 
 @app.get("/votos_titulo/")
 def votos_titulo(titulop: str):
+    """
+    ¿Curioso sobre cómo le fue a una película con más de 2000 valoraciones?
+    Descubre su año de estreno, número de votos y calificación promedio con esta función.
+    """
     #verificra se si ha proporcionado un nombre valido. 
     try:
         if not isinstance(titulop, str) or not titulop.strip():
@@ -172,6 +182,10 @@ def votos_titulo(titulop: str):
 @app.get("/get_actor/")
 # Función para obtener información del actor
 def get_actor(nombre_actor: str):
+    """
+    ¿Quieres saber cuántas películas ha hecho tu actor favorito y cómo le ha ido en términos de retorno?
+    Ingresa el nombre del actor y obtén toda la información.
+    """
     # Verficiar si se ha proporcionado un nombre válido del actor
     if not isinstance(nombre_actor, str) or not nombre_actor.strip():
         return "Nombre no valido. Por favor, proporciona un nombre valido de actor."
@@ -200,6 +214,10 @@ def get_actor(nombre_actor: str):
 
 @app.get("/get_director/")
 def get_director(nombre_director: str):
+    """
+    ¿Te interesa conocer las películas dirigidas por tu director favorito y su éxito?
+    Esta función te ofrece una lista de sus películas, su retorno total y el promedio de retorno.
+    """
     # Vericicar si se ha proporcionado un nombre valido de director 
     if not isinstance(nombre_director, str) or not nombre_director.strip():
         raise HTTPException(status_code=400, detail="Nombre no válido. Por favor, proporciona un nombre válido de director.")
@@ -271,9 +289,14 @@ tfidf_matrix = tfidf_vectorizer.fit_transform(movies['combined_features'])
 nn_model = NearestNeighbors(n_neighbors=6, metric='cosine')  # Ajusta el número de vecinos según sea necesario
 nn_model.fit(tfidf_matrix)
 
+
 @app.get("/recomendacion/")
 # Crear la función de recomendación
 def recomendacion(titulo: str):
+    """
+    ¿Te gustó una película y quieres ver más como esa?
+    ¡Esta función te recomienda películas similares! Ingresa el título de la película y recibe recomendaciones personalizadas.
+    """
     # # Vericicar si se ha proporcionado un nombre valido de pelicula 
     if not isinstance(titulo, str) or not titulo.strip():
         return "Nombre no válido. Por favor, proporciona un nombre de película válido."
