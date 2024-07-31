@@ -1,6 +1,6 @@
 <center>
 
-![Image](image_proyect\HEADER-BLOG-NEGRO-01.jpg)
+![Image](image_proyect/HEADER-BLOG-NEGRO-01.jpg)
 
 # **Sistema de Recomendación de Películas startup Space** 
 
@@ -9,10 +9,7 @@ Este proyecto se desarrolló para Space, una startup que provee servicios de agr
 
 ## Tecnologías Utilizadas
 
-<center>
-
-![Image Bonita](image_proyect\space.jpg)
-</center>
+![Image Bonita](image_proyect/space.jpg)
 
 ### ETL (Extracción, Transformación y Carga)
 
@@ -87,7 +84,7 @@ El resumen estadístico ofrece una vista general de la distribución de los dato
   
 <center>
 
-![Image Bonita](image_proyect\correlacion_variables.png)
+![Image-1](image_proyect/correlacion_variables.png)
 </center>
 
 Esto Identificara las correlaciones que funcionan para entender cómo las variables influyen entre sí. Una alta correlación entre el presupuesto (budget) y los ingresos (revenue) indica que películas con mayor presupuesto tienden a generar más ingresos, lo que puede ser un factor a considerar en el modelo de recomendación.
@@ -97,7 +94,7 @@ La correlación entre vote_count (cantidad de votos) y budget sugiere que las pe
 
 <center>
 
-![Image Bonita](image_proyect\estado_peliculas.png)
+![Image-2](image_proyect/estado_peliculas.png)
 </center>
 
 Se Analizarón los diferentes estados de las películas (Released, Rumored, Post production, etc.) es esencial para evitar recomendar películas que aún no han sido estrenadas o que están en un estado de producción incierto. Este filtro mejora la experiencia del usuario al garantizar que solo se recomienden películas disponibles para ver.
@@ -106,13 +103,13 @@ Se Analizarón los diferentes estados de las películas (Released, Rumored, Post
 
 <center>
 
-![Image Bonita](image_proyect\regresion_lineal_presuvsingre.png)
+![Image3](image_proyect/regresion_lineal_presuvsingre.png)
 
-![Image Bonita](image_proyect\ingreso_años.png)
+![Image4](image_proyect/ingreso_años.png)
 
-![Image Bonita](image_proyect\presupuesto_años.png)
+![Image5](image_proyect/presupuesto_años.png)
 
-![Image Bonita](image_proyect\pesupuesto_vs_ingreso.png)
+![Image6](image_proyect/pesupuesto_vs_ingreso.png)
 </center>
 
 Se Evaluo cómo ha evolucionado el presupuesto cinematográfico con el tiempo permite entender las tendencias de producción en diferentes épocas. Esto es importante para ajustar el modelo y recomendar películas de acuerdo con las preferencias temporales del usuario. 
@@ -120,9 +117,9 @@ Se Evaluo cómo ha evolucionado el presupuesto cinematográfico con el tiempo pe
 * Word clouds (genres_names y overview):
 <center>
 
-![Image Bonita](image_proyect\wordcloud_genres.png)
+![Image7](image_proyect/wordcloud_genres.png)
 
-![Image Bonita](image_proyect\wordcloud_overview.png)
+![Image8](image_proyect/wordcloud_overview.png)
 </center>
 
 Estas nubes de palabras proporcionan una representación visual de los términos más frecuentes en géneros y descripciones (overview). Esto ayuda a identificar patrones comunes en el contenido, lo que es útil para personalizar las recomendaciones basadas en los géneros o temáticas que el usuario prefiere.
@@ -130,9 +127,9 @@ Estas nubes de palabras proporcionan una representación visual de los términos
 * Análisis de actores y directores:
 <center>
 
-![Image Bonita](image_proyect\actores_más_comunes.png)
+![Image9](image_proyect/actores_más_comunes.png)
 
-![Image Bonita](image_proyect\directores_mas_comunes.png)
+![Image10](image_proyect/directores_mas_comunes.png)
 </center>
 
 Este análisis permite identificar los actores y directores más influyentes o recurrentes en la base de datos, lo que puede ser un factor decisivo en las recomendaciones. 
@@ -140,7 +137,7 @@ Este análisis permite identificar los actores y directores más influyentes o r
 * Verificación de outliers:
 <center>
 
-![Image Bonita](image_proyect\outliers_variables.png)
+![Image11](image_proyect/outliers_variables.png)
 </center>
 
  la Identificación y manejo de outliers es fundamental para evitar que valores extremos (que no representan el comportamiento típico de las películas) distorsionen el modelo de recomendación.Sin embargo, aunque es necesario identificar los outliers en columnas de valores como el presupuesto o los ingresos, no se imputa información faltante en ciertos casos, como en las votaciones de las películas. Esto se debe a que imputar datos en métricas como las votaciones podría alterar las métricas existentes, especialmente si las películas aún no han recibido calificaciones. En estos casos, es más adecuado mantener los valores como faltantes en lugar de introducir información que no refleje la realidad, asegurando que las recomendaciones sean más representativas y precisas.
