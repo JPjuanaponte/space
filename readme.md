@@ -1,6 +1,6 @@
 <center>
 
-![Image Bonita](image_proyect\HEADER-BLOG-NEGRO-01.jpg)
+![Image](image_proyect\HEADER-BLOG-NEGRO-01.jpg)
 
 # **Sistema de Recomendación de Películas startup Space** 
 
